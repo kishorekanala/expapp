@@ -26,7 +26,7 @@ def submit_outflow():
 
 def submit_contribution():
     contribution_date = contribution_date_entry.get()
-    contribution_source = contribution_source_entry.get()
+    contribution_source = contribution_source_combobox.get()
     amount = contribution_amount_entry.get()
     notes = contribution_notes_text.get("1.0", tk.END)
     
@@ -90,8 +90,8 @@ inflow_date_entry = tk.Entry(inflow_entry_frame)
 inflow_date_entry.grid(row=0, column=1, padx=10, pady=5)
 
 tk.Label(inflow_entry_frame, text="Inflow Source:").grid(row=1, column=0, padx=10, pady=5)
-inflow_source_entry = tk.Entry(inflow_entry_frame)
-inflow_source_entry.grid(row=1, column=1, padx=10, pady=5)
+inflow_source_combobox = ttk.Combobox(inflow_entry_frame, values=config["inflow_heads"])
+inflow_source_combobox.grid(row=1, column=1, padx=10, pady=5)
 
 tk.Label(inflow_entry_frame, text="Amount:").grid(row=2, column=0, padx=10, pady=5)
 inflow_amount_entry = tk.Entry(inflow_entry_frame)

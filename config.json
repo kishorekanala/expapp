@@ -11,6 +11,13 @@
         "Miscellaneous"
     ],
 
+    "inflow_heads": [
+        "Appa",
+        "X",
+        "Y",
+        "Z"
+    ],
+
     "contribution_heads": [
         "Appa",
         "X",
