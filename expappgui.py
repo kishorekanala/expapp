@@ -1,6 +1,8 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, filedialog
 import json
+
+from outflowdatabase import * 
 
 def load_config():
     with open('config.json', 'r') as file:
@@ -23,6 +25,12 @@ def submit_outflow():
     
     # Placeholder for action to handle the data
     print(data)  # Replace this with actual action
+    
+    insert_data(outflow_date, outflow_head, beneficiary_name, amount, notes)
+
+    rows = read_data()
+    for row in rows:
+        print(row)
 
 def submit_contribution():
     contribution_date = contribution_date_entry.get()
@@ -39,6 +47,19 @@ def submit_contribution():
     
     # Placeholder for action to handle the data
     print(data)  # Replace this with actual action
+
+def import_file():
+    file_path = filedialog.askopenfilename()
+    if file_path:
+        # Placeholder for action to handle the file import
+        print(f"Importing file from: {file_path}")  # Replace this with actual action
+
+# Define the bulk_entry function
+def bulk_entry():
+    file_path = filedialog.askopenfilename()
+    if file_path:
+        # Placeholder for action to handle the file import
+        print(f"Selected file: {file_path}")
 
 # Create the main window
 root = tk.Tk()
@@ -76,9 +97,13 @@ tk.Label(outflow_entry_frame, text="Notes:").grid(row=4, column=0, padx=10, pady
 outflow_notes_text = tk.Text(outflow_entry_frame, height=5, width=30)
 outflow_notes_text.grid(row=4, column=1, padx=10, pady=5)
 
-# Create and place the submit button for outflow entry
-submit_outflow_button = tk.Button(outflow_entry_frame, text="Submit Outflow", command=submit_outflow)
-submit_outflow_button.grid(row=5, column=0, columnspan=2, pady=10)
+# Create the Submit button
+submit_button = tk.Button(outflow_entry_frame, text="Submit", command=submit_outflow)
+submit_button.grid(row=5, column=0, padx=5, pady=5)
+
+# Create the Bulk Entry button
+bulk_entry_button = tk.Button(outflow_entry_frame, text="Bulk Entry", command=bulk_entry)
+bulk_entry_button.grid(row=5, column=1, padx=5, pady=5)
 
 # Create the inflow entry frame with border and heading
 inflow_entry_frame = tk.LabelFrame(root_frame, text="Inflow Entry")
@@ -138,6 +163,8 @@ for i, head in enumerate(config["contribution_heads"], start=1):
 tk.Label(contributions_summary_frame, text="Total Contributions:").grid(row=0, column=0, padx=10, pady=5)
 total_contributions_label = tk.Label(contributions_summary_frame, text="0.00")
 total_contributions_label.grid(row=0, column=1, padx=10, pady=5)
+
+create_table()
 
 # Run the application
 root.mainloop()
