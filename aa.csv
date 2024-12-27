@@ -88,7 +88,7 @@ Date,Head,Amount,Name,Description
 04/05/2022,Medicines,-565,Kasthuri Medicals,Medicines
 07/05/2022,Medicines,-300,Kasthuri Medicals,Medicines
 14/05/2022,Medicines,-1680,Kasthuri Medicals,Medicines
-21/05/2022,Insurance,39150,Insurance refund,Insurance refund
+21/05/2022,Inflow,39150,Insurance refund,Insurance refund
 04/06/2022,Medicines,-540,Kasthuri Medicals,Medicines
 19/06/2022,Medicines,-500,Kasthuri Medicals,Medicines
 25/06/2022,Medicines,-1370,Kasthuri Medicals,Medicines
@@ -197,20 +197,20 @@ Date,Head,Amount,Name,Description
 01/05/2024,SukiHomesTrust,-21500,Suki homes trust,Monthly payment
 01/05/2024,Caretaker,-22000,Vanitha,Caretaker
 01/05/2024,Caretaker,-8000,Ammayamma,Caretaker
-01/06/2024,Insurance,8000,Withdrawal from appa account,Took from appa
+01/06/2024,Inflow,8000,Withdrawal from appa account,Took from appa
 01/06/2024,SukiHomesTrust,-21500,Suki homes trust,Monthly payment
 01/06/2024,Caretaker,-22000,Vanitha,Caretaker
 01/06/2024,Caretaker,-8000,Ammayamma,Caretaker
-01/06/2024,Insurance,8000,Withdrawal from appa account,Took from appa
+01/06/2024,Inflow,8000,Withdrawal from appa account,Took from appa
 01/07/2024,SukiHomesTrust,-21500,Suki homes trust,Monthly payment
 01/07/2024,Caretaker,-23500,Vanitha,Caretaker
 01/07/2024,Caretaker,-8000,Ammayamma,Caretaker
-01/07/2024,Insurance,8000,Withdrawal from appa account,Took from appa
+01/07/2024,Inflow,8000,Withdrawal from appa account,Took from appa
 01/08/2023,SukiHomesSetup,-5376,Bathroom support,Suki homes setup
 01/10/2023,Caretaker,-10000,Vanitha (Dussehra),Care taker
-2023,Insurance,-67500,Cash withdrawal,Mis
-2023,Insurance,67500,Appa acc transfer to Kishore,Took from appa
-2022,Insurance,252000,Appa cheque to Kishore,Took from appa
+12/12/2023,Cash to Appa,-67500,Cash withdrawal,Mis
+12/12/2023,Inflow,67500,Appa acc transfer to Kishore,Took from appa
+8/10/2022,Inflow,252000,Appa cheque to Kishore,Took from appa
 06/03/2024,Medicines,-935,Kasthuri Medicals,Medicines
 03/03/2024,Medicines,-200,Kasthuri Medicals,Medicines
 26/02/2024,Medicines,-4110,Kasthuri Medicals,Medicines
