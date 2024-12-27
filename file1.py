@@ -29,7 +29,7 @@ def print_contents(file_name):
             print("\nRow Data:")
             for col_name in df.columns:
                 print(f"{col_name}:{row[col_name]}")
-    print(tabulate(df, headers='keys', tablefmt='grid'))
+    #print(tabulate(df, headers='keys', tablefmt='grid'))
 
             
     err= validate_date(row["Date"])
