@@ -28,20 +28,26 @@ def print_contents(file_name):
         for _, row in df.iterrows():
             print("\nRow Data:")
             for col_name in df.columns:
-                print(f"{col_name}:{row[col_name]}")
-    print(tabulate(df, headers='keys', tablefmt='grid'))
-
-            
+                print(f"{col_name}")
+                print(f"{row[col_name]}")
+    
+           
     err= validate_date(row["Date"])
     if err:
         print("Error.")
 
-
+def print_table(file_name):
+    df=read_file(file_name)
+    print(df.to_string(index=False, justify="center"))
         
+def amount_sum(amount):
+    df=read_file(file_name)
 
+    
 #print(storeoutflowdata(file_name))
-print_contents(file_name)
+#print_contents(file_name)
 #print(read_file(file_name))
+print(print_table(file_name))
     
 
 
