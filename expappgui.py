@@ -1,36 +1,58 @@
 import tkinter as tk
-from tkinter import ttk, filedialog
+from tkinter import ttk, filedialog, messagebox
 import json
 
 from outflowdatabase import * 
+from readcashflowdata import *
 
 def load_config():
     with open('config.json', 'r') as file:
         return json.load(file)
 
 def submit_outflow():
-    outflow_date = outflow_date_entry.get()
-    outflow_head = outflow_head_combobox.get()
-    beneficiary_name = outflow_name_entry.get()
-    amount = outflow_amount_entry.get()
-    notes = outflow_notes_text.get("1.0", tk.END)
     
-    data = {
-        "OutFlow Date": outflow_date,
-        "OutFlow Head": outflow_head,
-        "Name": beneficiary_name,
-        "Amount": amount,
-        "Note": notes.strip()
-    }
-    
-    # Placeholder for action to handle the data
-    print(data)  # Replace this with actual action
-    
-    insert_data(outflow_date, outflow_head, beneficiary_name, amount, notes)
+    df, rows = get_cashflowdata(file_path_entry.get())
 
-    rows = read_data()
-    for row in rows:
-        print(row)
+    #for row in rows:
+    #    print(row)
+    print(df)
+
+    # Ask for user confirmation
+    if not messagebox.askyesno("Confirmation", "Do you want to display the DataFrame?"):
+        return
+
+    # Create a new frame to display the DataFrame
+    df_frame = tk.LabelFrame(root_frame, text="DataFrame Display")
+    df_frame.grid(row=0, column=2, rowspan=2, padx=10, pady=10, sticky="nsew")
+
+    # Create a canvas and scrollbars
+    canvas = tk.Canvas(df_frame)
+    v_scrollbar = ttk.Scrollbar(df_frame, orient="vertical", command=canvas.yview)
+    h_scrollbar = ttk.Scrollbar(df_frame, orient="horizontal", command=canvas.xview)
+    scrollable_frame = ttk.Frame(canvas)
+
+    scrollable_frame.bind(
+        "<Configure>",
+        lambda e: canvas.configure(
+            scrollregion=canvas.bbox("all")
+        )
+    )
+
+    canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+    canvas.configure(yscrollcommand=v_scrollbar.set, xscrollcommand=h_scrollbar.set)
+
+    # Place the canvas and scrollbars in the frame
+    canvas.grid(row=0, column=0, sticky="nsew")
+    v_scrollbar.grid(row=0, column=1, sticky="ns")
+    h_scrollbar.grid(row=1, column=0, sticky="ew")
+
+    df_frame.grid_rowconfigure(0, weight=1)
+    df_frame.grid_columnconfigure(0, weight=1)
+
+    # Display the DataFrame in the scrollable frame
+    for i, (index, row) in enumerate(df.iterrows()):
+        for j, value in enumerate(row):
+            tk.Label(scrollable_frame, text=value).grid(row=i, column=j, padx=5, pady=5)
 
 def submit_contribution():
     contribution_date = contribution_date_entry.get()
@@ -58,7 +80,6 @@ def import_file():
 def bulk_entry():
     file_path = filedialog.askopenfilename()
     if file_path:
-        # Placeholder for action to handle the file import
         print(f"Selected file: {file_path}")
 
 # Create the main window
@@ -73,66 +94,30 @@ root_frame = ttk.Frame(root)
 root_frame.grid(row=0, column=0, padx=10, pady=10)
 
 # Create the outflow entry frame with border and heading
-outflow_entry_frame = tk.LabelFrame(root_frame, text="Outflow Entry")
-outflow_entry_frame.grid(row=0, column=0, padx=10, pady=10, sticky="n")
+cashflow_entry_frame = tk.LabelFrame(root_frame, text="Cashflow Entry")
+cashflow_entry_frame.grid(row=0, column=0, columnspan=2, padx=10, pady=10, sticky="ew")
 
 # Create and place the labels and entry widgets in the outflow entry frame
-tk.Label(outflow_entry_frame, text="Outflow Date (dd/mm/yyyy):").grid(row=0, column=0, padx=10, pady=5)
-outflow_date_entry = tk.Entry(outflow_entry_frame)
-outflow_date_entry.grid(row=0, column=1, padx=10, pady=5)
+tk.Label(cashflow_entry_frame, text="CashFlow Data \nFile Path:").grid(row=6, column=0, padx=5, pady=5)
+file_path_entry = tk.Entry(cashflow_entry_frame)
+file_path_entry.grid(row=6, column=1, padx=5, pady=5)
 
-tk.Label(outflow_entry_frame, text="Outflow Head:").grid(row=1, column=0, padx=10, pady=5)
-outflow_head_combobox = ttk.Combobox(outflow_entry_frame, values=config["outflow_heads"])
-outflow_head_combobox.grid(row=1, column=1, padx=10, pady=5)
+def select_file():
+    file_path = filedialog.askopenfilename()
+    if file_path:
+        file_path_entry.delete(0, tk.END)
+        file_path_entry.insert(0, file_path)
 
-tk.Label(outflow_entry_frame, text="Beneficiary Name:").grid(row=2, column=0, padx=10, pady=5)
-outflow_name_entry = tk.Entry(outflow_entry_frame)
-outflow_name_entry.grid(row=2, column=1, padx=10, pady=5)
-
-tk.Label(outflow_entry_frame, text="Amount:").grid(row=3, column=0, padx=10, pady=5)
-outflow_amount_entry = tk.Entry(outflow_entry_frame)
-outflow_amount_entry.grid(row=3, column=1, padx=10, pady=5)
-
-tk.Label(outflow_entry_frame, text="Notes:").grid(row=4, column=0, padx=10, pady=5)
-outflow_notes_text = tk.Text(outflow_entry_frame, height=5, width=30)
-outflow_notes_text.grid(row=4, column=1, padx=10, pady=5)
+select_file_button = tk.Button(cashflow_entry_frame, text="Select File", command=select_file)
+select_file_button.grid(row=6, column=2, padx=5, pady=5)
 
 # Create the Submit button
-submit_button = tk.Button(outflow_entry_frame, text="Submit", command=submit_outflow)
-submit_button.grid(row=5, column=0, padx=5, pady=5)
+submit_button = tk.Button(cashflow_entry_frame, text="Submit", command=submit_outflow)
+submit_button.grid(row=6, column=3, padx=5, pady=5)
 
-# Create the Bulk Entry button
-bulk_entry_button = tk.Button(outflow_entry_frame, text="Bulk Entry", command=bulk_entry)
-bulk_entry_button.grid(row=5, column=1, padx=5, pady=5)
-
-# Create the inflow entry frame with border and heading
-inflow_entry_frame = tk.LabelFrame(root_frame, text="Inflow Entry")
-inflow_entry_frame.grid(row=1, column=0, padx=10, pady=10, sticky="n")
-
-# Create and place the labels and entry widgets in the inflow entry frame
-tk.Label(inflow_entry_frame, text="Inflow Date (dd/mm/yyyy):").grid(row=0, column=0, padx=10, pady=5)
-inflow_date_entry = tk.Entry(inflow_entry_frame)
-inflow_date_entry.grid(row=0, column=1, padx=10, pady=5)
-
-tk.Label(inflow_entry_frame, text="Inflow Source:").grid(row=1, column=0, padx=10, pady=5)
-inflow_source_combobox = ttk.Combobox(inflow_entry_frame, values=config["inflow_heads"])
-inflow_source_combobox.grid(row=1, column=1, padx=10, pady=5)
-
-tk.Label(inflow_entry_frame, text="Amount:").grid(row=2, column=0, padx=10, pady=5)
-inflow_amount_entry = tk.Entry(inflow_entry_frame)
-inflow_amount_entry.grid(row=2, column=1, padx=10, pady=5)
-
-tk.Label(inflow_entry_frame, text="Notes:").grid(row=3, column=0, padx=10, pady=5)
-inflow_notes_text = tk.Text(inflow_entry_frame, height=5, width=30)
-inflow_notes_text.grid(row=3, column=1, padx=10, pady=5)
-
-# Create and place the submit button for inflow entry
-submit_inflow_button = tk.Button(inflow_entry_frame, text="Submit Inflow", command=submit_contribution)
-submit_inflow_button.grid(row=4, column=0, columnspan=2, pady=10)
-
-# Create the outflow summary frame on the right-hand side of the outflow entry frame
+# Create the outflow summary frame below the cashflow entry frame
 outflow_summary_frame = tk.LabelFrame(root_frame, text="Outflow Summary")
-outflow_summary_frame.grid(row=0, column=1, padx=10, pady=10, sticky="n")
+outflow_summary_frame.grid(row=1, column=0, padx=10, pady=10, sticky="n")
 
 # Add more outflow heads as needed
 # Dynamically create labels for each outflow head from the config
@@ -147,7 +132,7 @@ tk.Label(outflow_summary_frame, text="Total Outflow:").grid(row=0, column=0, pad
 total_outflow_label = tk.Label(outflow_summary_frame, text="0.00")
 total_outflow_label.grid(row=0, column=1, padx=10, pady=5)
 
-# Create the contributions summary frame on the right-hand side of the inflow entry frame
+# Create the contributions summary frame to the right of the outflow summary frame
 contributions_summary_frame = tk.LabelFrame(root_frame, text="Contributions Summary")
 contributions_summary_frame.grid(row=1, column=1, padx=10, pady=10, sticky="n")
 
