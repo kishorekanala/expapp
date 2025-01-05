@@ -41,7 +41,6 @@ def print_table(file_name):
     print(df.to_string(index=False, justify="center"))
         
 def amount_sum(amount):
-    total_sum=0
     df=read_file(file_name)
     
     if amount in df.columns:
@@ -55,29 +54,59 @@ def amount_sum(amount):
 def print_amount_sum(amount):
     total_sum=0
     df=read_file(file_name)
-    for row in range(len(df)):
-        total_sum+=row
+    total_sum=df["Amount"].sum()
     print("-------------")
     print("The total amount spent:", float(total_sum))
     print("-------------")
 
-def average_amount(amount):
+
+def total_average_amount(head):
     total_sum=0
     df=read_file(file_name)
-    for row in range(len(df)):
-        total_sum+=row
+    for i in head:
+        for j in head[i]:
+            total_sum=df[i][j].sum()
     average_amount=total_sum/(len(df))
     print("Average amount spent:",float(average_amount))
 
 
-
+def print_only_headandamount(head,amount):
+    df=read_file(file_name)
+    selected_columns=df[["Head","Amount"]]
+    print("Selected Columns:")
+    print(selected_columns)
+    head_list=list(df["Head"])
+    amount_list=list(df["Amount"])
+    together=dict(zip(head_list,amount_list))
+    #print("Head List:\n",head_list)
+    #print("Amount List:\n", amount_list)
+    print(together)
+    
+def sum_of_headandamount(head,amount):
+    df=read_file(file_name)
+    category_totals=df.groupby("Head")["Amount"].sum()
+    print("The total amount for each category:")
+    print(category_totals)
+    
+def avg_of_headandamount(head,amount):
+    df=read_file(file_name)
+    category_totals=df.groupby("Head")["Amount"].mean()
+    print("The average for each category:")
+    print(category_totals)
+    
 
 #print(storeoutflowdata(file_name))
 #print_contents(file_name)
 #print(read_file(file_name))
 #print(print_table(file_name))
-average_amount("Amount")
-print_amount_sum("Amount")
+
+#amount_sum("Amount")
+#average_amount("Amount")
+#print_amount_sum("Amount")
+#print_only_headandamount("Head","Amount")
+#sum_of_headandamount("Head","Amount")
+avg_of_headandamount("Head","Amount")
+
 
     
 
