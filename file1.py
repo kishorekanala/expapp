@@ -39,7 +39,10 @@ def print_contents(file_name):
 def print_table(file_name):
     df=read_file(file_name)
     print(df.to_string(index=False, justify="center"))
-        
+
+
+# Donot print the total within the function. return the total, 
+# call the function and print it outside function 
 def amount_sum(amount):
     df=read_file(file_name)
     
@@ -51,6 +54,8 @@ def amount_sum(amount):
     else:
         print(f"Column '{amount}' not found in the file.")
 
+# Donot print the total within the function. return the total, 
+# call the function and print it outside function
 def print_amount_sum(amount):
     total_sum=0
     df=read_file(file_name)
@@ -60,6 +65,8 @@ def print_amount_sum(amount):
     print("-------------")
 
 
+# Donot print the average amount within the function. return the average amount, 
+# call the function and print it outside function
 def total_average_amount(head):
     total_sum=0
     df=read_file(file_name)
@@ -70,6 +77,8 @@ def total_average_amount(head):
     print("Average amount spent:",float(average_amount))
 
 
+# Donot print the total amount per head within the function. return the total amount per head, 
+# call the function and print it outside function
 def print_only_headandamount(head,amount):
     df=read_file(file_name)
     selected_columns=df[["Head","Amount"]]
@@ -81,13 +90,19 @@ def print_only_headandamount(head,amount):
     #print("Head List:\n",head_list)
     #print("Amount List:\n", amount_list)
     print(together)
-    
+
+
+# Donot print the total amount per head within the function. return the total amount per head, 
+# call the function and print it outside function
 def sum_of_headandamount(head,amount):
     df=read_file(file_name)
     category_totals=df.groupby("Head")["Amount"].sum()
     print("The total amount for each category:")
     print(category_totals)
-    
+
+
+# Donot print the avg amount per head within the function. return the avg amount per head, 
+# call the function and print it outside function
 def avg_of_headandamount(head,amount):
     df=read_file(file_name)
     category_totals=df.groupby("Head")["Amount"].mean()
